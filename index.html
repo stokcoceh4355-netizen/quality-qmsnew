@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <title>Untitled</title>
+    
+
+  </head>
+    
+  <body>
+  <html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>QMS AIRIN FINAL</title>
+<script>
+function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();location.href=location.pathname+'?logout=1&v='+Date.now();}
+(function(){try{var p=new URLSearchParams(location.search);if(p.has('logout')){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();alert('LOGOUT OK');location.href=location.pathname+'?v='+Date.now();}}catch(e){}})();
+</script></head>
+<body style="margin:0;padding:8px;background:#eee;font-family:Arial">
+<div style="background:#fff;padding:10px;max-width:550px;margin:auto">
+<div style="background:blue;color:#fff;padding:10px;text-align:center;font-weight:bold">QUALITY DEPARTEMEN</div>
+<br>Customer:<br>
+<input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #3b82f6;box-sizing:border-box" onkeyup="FS()">
+<select id="a" style="width:100%;padding:14px;border:3px solid blue;margin-top:4px"></select>
+<br><br>Part:<br>
+<input id="fp" placeholder="CARI PART" style="width:100%;padding:12px;border:3px solid #3b82f6;box-sizing:border-box" onkeyup="FP()">
+<select id="b" style="width:100%;padding:14px;border:3px solid blue;margin-top:4px"></select>
+<br><br><b style="color:red">Kekurangan:</b><br>
+<input id="k" style="width:100%;padding:14px;border:3px solid blue;background:#87CEEB;box-sizing:border-box">
+<br><br>Ket:<br><select id="c" style="width:100%;padding:14px;border:3px solid blue"></select>
+<br><br>Catatan:<br><textarea id="ct" style="width:100%;padding:10px;border:3px solid #1e40af;box-sizing:border-box;height:70px"></textarea>
+<br><br><button onclick="K()" style="width:100%;padding:15px;background:blue;color:#fff;font-weight:bold">KIRIM LAPORAN</button>
+
+<div style="margin-top:12px;overflow-x:auto">
+<table border="1" cellpadding="5" cellspacing="0" style="width:100%;border-collapse:collapse;background:#fff;text-align:center;font-size:12px">
+<thead style="background:blue;color:#fff"><tr><th>No</th><th>Cust</th><th>Part No</th><th>Kekurangan</th><th>Ket</th><th>Waktu</th><th>X</th></tr></thead>
+<tbody id="h"><tr><td colspan="7" style="color:#999">Belum ada laporan</td></tr></tbody>
+</table>
+</div>
+<div id="noteP" style="margin-top:8px;padding:10px;background:#eff6ff;border-left:4px solid blue;display:none;font-size:12px"></div>
+
+<button onclick="W()" style="width:100%;padding:12px;background:blue;color:#fff;margin-top:10px;font-weight:bold">SHARE WA</button>
+<button onclick="G()" style="width:100%;padding:12px;background:blue;color:#fff;margin-top:6px;font-weight:bold">JADI GAMBAR (PREVIEW DULU)</button>
+
+<div id="prev" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;overflow:auto;padding:10px;box-sizing:border-box">
+<div style="background:#fff;padding:10px;max-width:850px;margin:auto"><b>PREVIEW GAMBAR</b> - ini total semua laporan
+<br><img id="imgPrev" style="width:100%;border:2px solid #000;margin-top:10px"><br><br>
+<button onclick="DL()" style="width:100%;padding:14px;background:green;color:#fff;font-weight:bold">DOWNLOAD GAMBAR INI</button>
+<button onclick="document.getElementById('prev').style.display='none'" style="width:100%;padding:10px;background:#000;color:#fff;margin-top:6px">TUTUP</button>
+</div></div>
+
+<canvas id="v" style="display:none"></canvas>
+<hr><div style="text-align:center;padding:10px"><button onclick="L()" id="lb" style="background:#000;color:#fff;padding:12px 25px;font-weight:bold;border-radius:8px">LOGIN ADMIN</button></div>
+
+<div id="ad" style="display:none;border:3px solid red;background:#fee;padding:8px;font-size:12px"><b>ADMIN PANEL</b><br><br>Customer:<br><input id="i1" style="width:65%;padding:6px"><button onclick="A(1)">+</button><div id="l1" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Part:<br><input id="i2" style="width:65%;padding:6px"><button onclick="A(2)">+</button><div id="l2" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Ket:<br><input id="i3" style="width:65%;padding:6px"><button onclick="A(3)">+</button><div id="l3" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div><button onclick="S()" style="width:100%;padding:8px;background:green;color:#fff;font-weight:bold;margin-top:6px">SIMPAN PERMANEN</button><button onclick="E()" style="width:100%;padding:12px;background:#ff9800;color:#000;font-weight:bold;margin-top:6px;border:2px solid #000">EXPORT KE INDEX.HTML</button><button onclick="forceLogout()" style="width:100%;padding:14px;background:#000;color:#fff;margin-top:12px;font-weight:bold;border:2px solid red">LOGOUT ADMIN</button></div></div>
+
+<script>
+var defC=["FII","ASKA","NIC","NTC","DPM","SANGO","KIIN","ICHI","-"];
+var defP=["-","51513-0K030","51995-BZ070","65542-68P00","51961-KK011","51961-KK010","71876W030P","14002W050P-07","14002W280P-07","14002W280P-21","14002W280P-11","51999-BZ030","51992-BZ150(DPM)","48701-BZ031-V1","51994-BZ170","51992-BZ150(NIC)","66312-D1859","51922-D4110","51952-D4111","5220AU54","5220AU53","5230G328","5230G327","5251D307","751C4W010P","5311D195","5312C193","5314A791","5314A792","5220BA54","5253AT15","5253AT16","5220L089","5220L090","1091A475","1091A476","762B2B010P","762B3B010P","77618B000P","77619B000P","77626B000P","77627B000P","762B2C010P","762B3C010P","61767-VT020","61766-VT020","90174-T0019","94223-81000","94223-60600","94223-80600","62151-68P00","65162-68P00","62141-68P00","62162-68P00-G","62332-68P00-G","62132-68P00-G","D41E1-PP009S-G","57658-0D160-TDB","74U50-BK011S","74U50-PP616S","57248-VT020","57249-VT020","53746-VT020","53745-VT020","53725-VT020","58171-0D080","58339-0D250","53333-0D150","61677-0D080","55721-0D200","61419-0D110","61418-0D110","61738-0D070","61737-0D070","58218-0D090","58217-0D090","61414-0D080","61413-0D080","55778-0D060","55724-0D020","55723-0D090","61641-0D090","74U50-PP409S","D41E1-PP009S","61377-BZ140","61378-BZ080","61352-BZ170","61351-BZ170","62150-73R00","62140-73R00","62412-73R00","62362-73R00","62332-68P00-G","62212-73R00","62162-73R00","62132-68P00-G","62126-73R00","61315-73R00","67LA0-FL002S","67LA0-BKP09S","67LA0-BK008S","889FZ-PP009S","889FI-PP009S","D98E7-PP007S","61642-0D090"];
+var defT=["Ready","Tunggu produksi","Pending/Abnormal","Tunggu Material","Handwork","-"];
+function load(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+var C=load('qms_C',defC),P=load('qms_P',defP),T=load('qms_T',defT),D=[],isA=false,lastImg="";
+function saveAll(){localStorage.setItem('qms_C',JSON.stringify(C));localStorage.setItem('qms_P',JSON.stringify(P));localStorage.setItem('qms_T',JSON.stringify(T));localStorage.setItem('qms_note',document.getElementById('ct').value);}
+function R(){var a=document.getElementById('a'),b=document.getElementById('b'),c=document.getElementById('c');a.innerHTML='';for(var i=0;i<C.length;i++)a.innerHTML+='<option>'+C[i]+'</option>';b.innerHTML='';for(var i=0;i<P.length;i++)b.innerHTML+='<option>'+P[i]+'</option>';c.innerHTML='';for(var i=0;i<T.length;i++)c.innerHTML+='<option>'+T[i]+'</option>';var s='';for(var i=0;i<C.length;i++)s+=C[i]+' <a href="#" onclick="X(1,'+i+');return false;" style="color:red">[x]</a> ';document.getElementById('l1').innerHTML=s||'Kosong';s='';for(var i=0;i<P.length;i++)s+=P[i]+' <a href="#" onclick="X(2,'+i+');return false;" style="color:red">[x]</a> ';document.getElementById('l2').innerHTML=s||'Kosong';s='';for(var i=0;i<T.length;i++)s+=T[i]+' <a href="#" onclick="X(3,'+i+');return false;" style="color:red">[x]</a> ';document.getElementById('l3').innerHTML=s||'Kosong';}
+function FS(){var q=document.getElementById('fs').value.toLowerCase();var a=document.getElementById('a');a.innerHTML='';var ada=0;for(var i=0;i<C.length;i++){if(C[i].toLowerCase().indexOf(q)>-1){a.innerHTML+='<option>'+C[i]+'</option>';ada++;}}if(ada==0)for(var i=0;i<C.length;i++)a.innerHTML+='<option>'+C[i]+'</option>';}
+function FP(){var q=document.getElementById('fp').value.toLowerCase();var b=document.getElementById('b');b.innerHTML='';var ada=0;for(var i=0;i<P.length;i++){if(P[i].toLowerCase().indexOf(q)>-1){b.innerHTML+='<option>'+P[i]+'</option>';ada++;}}if(ada==0)for(var i=0;i<P.length;i++)b.innerHTML+='<option>'+P[i]+'</option>';}
+function A(n){var v=n==1?document.getElementById('i1').value:n==2?document.getElementById('i2').value:document.getElementById('i3').value;if(!v)return alert('Isi!');if(n==1)C.push(v);if(n==2)P.push(v);if(n==3)T.push(v);document.getElementById('i1').value='';document.getElementById('i2').value='';document.getElementById('i3').value='';R();saveAll();}
+function X(n,i){if(!confirm('Hapus?'))return;if(n==1)C.splice(i,1);if(n==2)P.splice(i,1);if(n==3)T.splice(i,1);R();saveAll();}
+function S(){localStorage.setItem('qms_C',JSON.stringify(C));localStorage.setItem('qms_P',JSON.stringify(P));localStorage.setItem('qms_T',JSON.stringify(T));alert('DISIMPAN PERMANEN!');}
+function E(){var h=document.documentElement.outerHTML;h=h.replace(/var defC=\[.*?\];/, 'var defC='+JSON.stringify(C)+';');h=h.replace(/var defP=\[.*?\];/, 'var defP='+JSON.stringify(P)+';');h=h.replace(/var defT=\[.*?\];/, 'var defT='+JSON.stringify(T)+';');var b=new Blob([h],{type:'text/html'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='index.html';a.click();alert('index.html OK, upload ke Netlify project BARU');}
+function L(){var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';return;}var p=prompt('PASSWORD ADMIN:');if(p==null)return;if(p=='airin123'){localStorage.setItem('qms_isAdmin','1');isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}else{alert('PASSWORD SALAH!');}}
+function dT(){var n=new Date();return n.getDate().toString().padStart(2,'0')+'/'+(n.getMonth()+1).toString().padStart(2,'0')+'/'+n.getFullYear()+' '+n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
+function K(){var c=document.getElementById('a').value,p=document.getElementById('b').value,k=document.getElementById('k').value,t=document.getElementById('c').value,n=document.getElementById('ct').value;if(!c||!p){alert('PILIH CUSTOMER & PART!');return;}if(!k){alert('ISI KEKURANGAN!');return;}var o={c:c,p:p,k:k,t:t,n:n,dt:dT()};D.unshift(o);U();saveAll();document.getElementById('k').value='';}
+function U(){
+  var tb=document.getElementById('h');
+  if(D.length==0){tb.innerHTML='<tr><td colspan="7" style="color:#999">Belum ada laporan</td></tr>';document.getElementById('noteP').style.display='none';return;}
+  var html='';
+  for(var i=0;i<D.length;i++){
+    var o=D[i];
+    html+='<tr><td>'+(D.length-i)+'</td><td>'+o.c+'</td><td style="font-size:10px">'+o.p+'</td><td style="color:red;font-weight:bold">'+o.k+'</td><td>'+o.t+'</td><td style="font-size:9px">'+o.dt+'</td><td><a href="#" onclick="D.splice('+i+',1);U();return false;" style="color:red">x</a></td></tr>';
+  }
+  tb.innerHTML=html;
+  var lp=D[0];
+  var np=document.getElementById('noteP');
+  if(lp&&lp.n){np.innerHTML='<b>Catatan:</b> '+lp.n+'<br><small>'+lp.dt+'</small>';np.style.display='block';}else{np.style.display='none';}
+}
+function W(){if(D.length==0){alert('Belum ada laporan!');return;}var txt='LAPORAN QMS%0A';for(var i=0;i<D.length;i++){var o=D[i];txt+=(i+1)+'. '+o.c+' | '+o.p+' | Kekurangan:'+o.k+' | '+o.t+'%0A';}txt+='%0A'+D[0].dt;window.open('https://wa.me/?text='+txt,'_blank');}
+function G(){
+  if(D.length==0){alert('Belum ada laporan!');return;}
+  var c=document.getElementById('v');
+  var x=c.getContext('2d');
+  var W=820;
+  var cols=[60,120,210,110,150,170];
+  var rowH=40;
+  var headH=50;
+  c.width=W+20;
+  c.height=70+headH+(D.length*rowH)+70;
+  x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
+  x.fillStyle='#1e40af';x.fillRect(0,0,c.width,50);
+  x.fillStyle='#fff';x.font='bold 20px Arial';x.fillText('LAPORAN KEKURANGAN QUALITY - DEPARTEMEN - '+dT(),20,32);
+  var y=70;
+  x.fillStyle='#1e40af';x.fillRect(10,y,W,headH);
+  x.fillStyle='#fff';x.font='bold 14px Arial';
+  var xx=15;
+  var headers=['NO','CUSTOMER','PART NO','KEKURANGAN','KET','WAKTU'];
+  for(var i=0;i<headers.length;i++){x.fillText(headers[i],xx,y+30);xx+=cols[i]+10;}
+  y+=headH;
+  for(var i=0;i<D.length;i++){
+    var o=D[i];
+    x.fillStyle=i%2==0?'#dbeafe':'#ffffff';
+    x.fillRect(10,y,W,rowH);
+    x.strokeStyle='#94a3b8';x.strokeRect(10,y,W,rowH);
+    var vx=10;
+    for(var j=0;j<cols.length;j++){vx+=cols[j]+10;x.beginPath();x.moveTo(vx,y);x.lineTo(vx,y+rowH);x.stroke();}
+    var tx=15;
+    var datas=[(i+1).toString(), o.c, o.p, o.k.toString(), o.t, o.dt];
+    for(var j=0;j<datas.length;j++){
+      if(j==3){x.fillStyle='#dc2626';x.font='bold 16px Arial';}else{x.fillStyle='#000';x.font='bold 13px Arial';}
+      var t=datas[j]; if(t.length>22 && j==2) t=t.substring(0,22);
+      x.fillText(t,tx,y+26); tx+=cols[j]+10;
+    }
+    y+=rowH;
+  }
+  if(D[0].n){y+=20;x.fillStyle='#000';x.font='bold 15px Arial';x.fillText('Catatan: '+D[0].n,15,y);}
+  lastImg=c.toDataURL('image/png');
+  document.getElementById('imgPrev').src=lastImg;
+  document.getElementById('prev').style.display='block';
+}
+function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='QMS_TOTAL_'+Date.now()+'.png';a.href=lastImg;a.click();}
+window.onload=function(){R();var n=localStorage.getItem('qms_note');if(n){document.getElementById('ct').value=n;}var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}document.getElementById('ct').addEventListener('input',saveAll);};
+</script>
+</body>
+</html>
+    
+  </body>
+  
+</html>
