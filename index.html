@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-
-  <head>
-    <meta charset="UTF-8">
-    <title>Untitled</title>
-    
-
-  </head>
-    
-  <body>
-  <html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>QMS AIRIN FINAL</title>
+<html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>QMS AIRIN FINAL</title>
 <script>
 function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();location.href=location.pathname+'?logout=1&v='+Date.now();}
 (function(){try{var p=new URLSearchParams(location.search);if(p.has('logout')){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();alert('LOGOUT OK');location.href=location.pathname+'?v='+Date.now();}}catch(e){}})();
@@ -18,16 +7,16 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 <div style="background:#fff;padding:10px;max-width:550px;margin:auto">
 <div style="background:#0e47a1;color:#fff;padding:10px;text-align:center;font-weight:bold">QUALITY DEPARTEMEN</div>
 <br>Customer:<br>
-<input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box" onkeyup="FS()">
-<select id="a" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px"></select>
+<input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box;border-radius:10px" onkeyup="FS()">
+<select id="a" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px;border-radius:10px"></select>
 <br><br>Part:<br>
-<input id="fp" placeholder="CARI PART" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box" onkeyup="FP()">
-<select id="b" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px"></select>
+<input id="fp" placeholder="CARI PART" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box;border-radius:10px" onkeyup="FP()">
+<select id="b" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px;border-radius:10px"></select>
 <br><br><b style="color:red">Kekurangan:</b><br>
-<input id="k" style="width:100%;padding:14px;border:3px solid #0e47a1;background:#87ceeb;box-sizing:border-box">
-<br><br>Ket:<br><select id="c" style="width:100%;padding:14px;border:3px solid #0e47a1"></select>
-<br><br>Catatan:<br><textarea id="ct" style="width:100%;padding:10px;border:3px solid #0e47a1;box-sizing:border-box;height:70px"></textarea>
-<br><br><button onclick="K()" style="width:100%;padding:15px;background:#0e47a1;color:#fff;font-weight:bold">KIRIM LAPORAN</button>
+<input id="k" style="width:100%;padding:14px;border:3px solid #0e47a1;background:#87ceeb;box-sizing:border-box;border-radius:10px">
+<br><br>Ket:<br><select id="c" style="width:100%;padding:14px;border:3px solid #0e47a1;border-radius:10px"></select>
+<br><br>Catatan:<br><textarea id="ct" style="width:100%;padding:10px;border:3px solid #0e47a1;box-sizing:border-box;height:70px;border-radius:10px"></textarea>
+<br><br><button onclick="K()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;font-weight:bold;display:block;margin:auto;border-radius:10px">KIRIM LAPORAN</button>
 
 <div style="margin-top:12px;overflow-x:auto">
 <table border="1" cellpadding="5" cellspacing="0" style="width:100%;border-collapse:collapse;background:#fff;text-align:center;font-size:12px">
@@ -37,8 +26,8 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 </div>
 <div id="noteP" style="margin-top:8px;padding:10px;background:#eff6ff;border-left:4px solid blue;display:none;font-size:12px"></div>
 
-<button onclick="W()" style="width:100%;padding:12px;background:#0e47a1;color:#fff;margin-top:10px;font-weight:bold">SHARE WA</button>
-<button onclick="G()" style="width:100%;padding:12px;background:#0e47a1;color:#fff;margin-top:6px;font-weight:bold">JADI GAMBAR (PREVIEW DULU)</button>
+<button onclick="W()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;display:block;margin:10px auto;font-weight:bold;border-radius:10px">SHARE WA</button>
+<button onclick="G()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;margin-top:6px;font-weight:bold;display:block;margin:auto;border-radius:10px">JADI GAMBAR (PREVIEW DULU)</button>
 
 <div id="prev" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;overflow:auto;padding:10px;box-sizing:border-box">
 <div style="background:#fff;padding:10px;max-width:850px;margin:auto"><b>PREVIEW GAMBAR</b> - ini total semua laporan
@@ -128,8 +117,4 @@ function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='Q
 window.onload=function(){R();var n=localStorage.getItem('qms_note');if(n){document.getElementById('ct').value=n;}var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}document.getElementById('ct').addEventListener('input',saveAll);};
 </script>
 </body>
-</html>
-    
-  </body>
-  
 </html>
