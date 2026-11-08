@@ -57,17 +57,17 @@ function S(){localStorage.setItem('qms_C',JSON.stringify(C));localStorage.setIte
 function E(){var h=document.documentElement.outerHTML;h=h.replace(/var defC=\[.*?\];/, 'var defC='+JSON.stringify(C)+';');h=h.replace(/var defP=\[.*?\];/, 'var defP='+JSON.stringify(P)+';');h=h.replace(/var defT=\[.*?\];/, 'var defT='+JSON.stringify(T)+';');var b=new Blob([h],{type:'text/html'});var u=URL.createObjectURL(b);var a=document.createElement('a');a.href=u;a.download='index.html';a.click();alert('index.html OK, upload ke Netlify project BARU');}
 function L(){var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';return;}var p=prompt('PASSWORD ADMIN:');if(p==null)return;if(p=='airin123'){localStorage.setItem('qms_isAdmin','1');isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}else{alert('PASSWORD SALAH!');}}
 function dT(){var n=new Date();return n.getDate().toString().padStart(2,'0')+'/'+(n.getMonth()+1).toString().padStart(2,'0')+'/'+n.getFullYear()+' '+n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0');}
-function K(){var c=document.getElementById('a').value,p=document.getElementById('b').value,k=document.getElementById('k').value,t=document.getElementById('c').value,n=document.getElementById('ct').value;if(!c||!p){alert('PILIH CUSTOMER & PART!');return;}if(!k){alert('ISI KEKURANGAN!');return;}var o={c:c,p:p,k:k,t:t,n:n,dt:dT()};D.unshift(o);U();saveAll();document.getElementById('k').value='';}
+function K(){var c=document.getElementById('a').value,p=document.getElementById('b').value,k=document.getElementById('k').value,t=document.getElementById('c').value,n=document.getElementById('ct').value;if(!c||!p){alert('PILIH CUSTOMER & PART!');return;}if(!k){alert('ISI KEKURANGAN!');return;}var o={c:c,p:p,k:k,t:t,n:n,dt:dT()};D.push(o);U();saveAll();document.getElementById('k').value='';}
 function U(){
   var tb=document.getElementById('h');
   if(D.length==0){tb.innerHTML='<tr><td colspan="7" style="color:#999">Belum ada laporan</td></tr>';document.getElementById('noteP').style.display='none';return;}
   var html='';
   for(var i=0;i<D.length;i++){
     var o=D[i];
-    html+='<tr><td>'+(D.length-i)+'</td><td>'+o.c+'</td><td style="font-size:10px">'+o.p+'</td><td style="color:red;font-weight:bold">'+o.k+'</td><td>'+o.t+'</td><td style="font-size:9px">'+o.dt+'</td><td><a href="#" onclick="D.splice('+i+',1);U();return false;" style="color:red">x</a></td></tr>';
+    html+='<tr><td>'+(i+1)+'</td><td>'+o.c+'</td><td style="font-size:10px">'+o.p+'</td><td style="color:red;font-weight:bold">'+o.k+'</td><td>'+o.t+'</td><td style="font-size:9px">'+o.dt+'</td><td><a href="#" onclick="D.splice('+i+',1);U();return false;" style="color:red">x</a></td></tr>';
   }
   tb.innerHTML=html;
-  var lp=D[0];
+  var lp=D[D.length-1];
   var np=document.getElementById('noteP');
   if(lp&&lp.n){np.innerHTML='<b>Catatan:</b> '+lp.n+'<br><small>'+lp.dt+'</small>';np.style.display='block';}else{np.style.display='none';}
 }
@@ -108,7 +108,7 @@ function G(){
     }
     y+=rowH;
   }
-  if(D[0].n){y+=20;x.fillStyle='#000';x.font='bold 15px Arial';x.fillText('Catatan: '+D[0].n,15,y);}
+  if(D[D.length-1].n){y+=20;x.fillStyle='#000';x.font='bold 15px Arial';x.fillText('Catatan: '+D[D.length-1].n,15,y);}
   lastImg=c.toDataURL('image/png');
   document.getElementById('imgPrev').src=lastImg;
   document.getElementById('prev').style.display='block';
