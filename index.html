@@ -7,26 +7,26 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 <div style="background:#fff;padding:10px;max-width:550px;margin:auto">
 <div style="background:#0e47a1;color:#fff;padding:10px;text-align:center;font-weight:bold">QUALITY DEPARTEMEN</div>
 <br>Customer:<br>
-<input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box;border-radius:10px" onkeyup="FS()">
-<select id="a" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px;border-radius:10px"></select>
+<input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #D5D5D5;box-sizing:border-box;border-radius:10px" onkeyup="FS()">
+<select id="a" style="width:100%;padding:14px;border:3px solid #D5D5D5;margin-top:4px;border-radius:10px"></select>
 <br><br>Part:<br>
-<input id="fp" placeholder="CARI PART" style="width:100%;padding:12px;border:3px solid #0e47a1;box-sizing:border-box;border-radius:10px" onkeyup="FP()">
-<select id="b" style="width:100%;padding:14px;border:3px solid #0e47a1;margin-top:4px;border-radius:10px"></select>
+<input id="fp" placeholder="CARI PART" style="width:100%;padding:12px;border:3px solid #D5D5D5;box-sizing:border-box;border-radius:10px" onkeyup="FP()">
+<select id="b" style="width:100%;padding:14px;border:3px solid #D5D5D5;margin-top:4px;border-radius:10px"></select>
 <br><br><b style="color:red">Kekurangan:</b><br>
-<input id="k" style="width:100%;padding:14px;border:3px solid #0e47a1;background:#87ceeb;box-sizing:border-box;border-radius:10px">
-<br><br>Ket:<br><select id="c" style="width:100%;padding:14px;border:3px solid #0e47a1;border-radius:10px"></select>
-<br><br>Catatan:<br><textarea id="ct" style="width:100%;padding:10px;border:3px solid #0e47a1;box-sizing:border-box;height:70px;border-radius:10px"></textarea>
-<br><br><button onclick="K()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;font-weight:bold;display:block;margin:auto;border-radius:10px">KIRIM LAPORAN</button>
+<input id="k" style="width:100%;padding:14px;border:3px solid #D5D5D5;background:#87ceeb;box-sizing:border-box;border-radius:10px">
+<br><br>Ket:<br><select id="c" style="width:100%;padding:14px;border:3px solid #D5D5D5;border-radius:10px"></select>
+<br><br>Catatan:<br><textarea id="ct" style="width:100%;padding:10px;border:3px solid #D5D5D5;box-sizing:border-box;height:70px;border-radius:10px"></textarea>
+<br><br><button onclick="K()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;font-weight:bold;display:block;margin:auto;border-radius:10px">TAMBAH</button>
 
 <div style="margin-top:12px;overflow-x:auto">
 <table border="1" cellpadding="5" cellspacing="0" style="width:100%;border-collapse:collapse;background:#fff;text-align:center;font-size:12px">
-<thead style="background:blue;color:#fff"><tr><th>No</th><th>Cust</th><th>Part No</th><th>Kekurangan</th><th>Ket</th><th>Waktu</th><th>X</th></tr></thead>
+<thead style="background:#0e47a1;color:#fff"><tr><th>No</th><th>Cust</th><th>Part No</th><th>Kekurangan</th><th>Ket</th><th>Waktu</th><th>X</th></tr></thead>
 <tbody id="h"><tr><td colspan="7" style="color:#999">Belum ada laporan</td></tr></tbody>
 </table>
 </div>
 <div id="noteP" style="margin-top:8px;padding:10px;background:#eff6ff;border-left:4px solid blue;display:none;font-size:12px"></div>
 
-<button onclick="W()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;display:block;margin:10px auto;font-weight:bold;border-radius:10px">SHARE WA</button>
+<button onclick="W()" style="width:auto;padding:12px 25px;background:#25D366;color:#fff;display:block;margin:10px auto;font-weight:bold;border-radius:10px">SHARE WA</button>
 <button onclick="G()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;margin-top:6px;font-weight:bold;display:block;margin:auto;border-radius:10px">JADI GAMBAR (PREVIEW DULU)</button>
 
 <div id="prev" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;overflow:auto;padding:10px;box-sizing:border-box">
@@ -76,39 +76,54 @@ function G(){
   if(D.length==0){alert('Belum ada laporan!');return;}
   var c=document.getElementById('v');
   var x=c.getContext('2d');
-  var W=820;
-  var cols=[60,120,210,110,150,170];
-  var rowH=40;
-  var headH=50;
+  var W=1080; // digedein biar muat
+  var cols=[80,170,300,180,200,250]; // total = 1180? no, ini totalnya kita hitung dari W
+  // Biar gak jebol, pakai posisi kumulatif, jangan +10 terus
+  var cols=[90, 180, 320, 180, 160, 250]; // total = 1180
+  W = cols.reduce((a,b)=>a+b,0);
+  var rowH=58;
+  var headH=62;
   c.width=W+20;
-  c.height=70+headH+(D.length*rowH)+70;
+  c.height=70+headH+(D.length*rowH)+80;
   x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
   x.fillStyle='#1e40af';x.fillRect(0,0,c.width,50);
-  x.fillStyle='#fff';x.font='bold 20px Arial';x.fillText('LAPORAN KEKURANGAN QUALITY - DEPARTEMEN - '+dT(),20,32);
+  x.fillStyle='#fff';x.font='bold 22px Arial';x.fillText('LAPORAN KEKURANGAN DELIVERY -  QUALITY DEPARTEMEN - '+dT(),20,33);
+  
   var y=70;
   x.fillStyle='#1e40af';x.fillRect(10,y,W,headH);
-  x.fillStyle='#fff';x.font='bold 14px Arial';
-  var xx=15;
+  x.fillStyle='#fff';x.font='bold 20px Arial';
   var headers=['NO','CUSTOMER','PART NO','KEKURANGAN','KET','WAKTU'];
-  for(var i=0;i<headers.length;i++){x.fillText(headers[i],xx,y+30);xx+=cols[i]+10;}
+  var pos=[10];
+  for(var i=0;i<cols.length;i++) pos.push(pos[i]+cols[i]);
+
+  for(var i=0;i<headers.length;i++){
+    x.fillText(headers[i], pos[i]+18, y+40);
+  }
   y+=headH;
   for(var i=0;i<D.length;i++){
     var o=D[i];
     x.fillStyle=i%2==0?'#dbeafe':'#ffffff';
     x.fillRect(10,y,W,rowH);
-    x.strokeStyle='#94a3b8';x.strokeRect(10,y,W,rowH);
-    var vx=10;
-    for(var j=0;j<cols.length;j++){vx+=cols[j]+10;x.beginPath();x.moveTo(vx,y);x.lineTo(vx,y+rowH);x.stroke();}
-    var tx=15;
+    x.strokeStyle='#94a3b8';x.lineWidth=1.5;
+    x.strokeRect(10,y,W,rowH);
+    for(var j=1;j<pos.length-1;j++){
+      x.beginPath();x.moveTo(pos[j],y);x.lineTo(pos[j],y+rowH);x.stroke();
+    }
     var datas=[(i+1).toString(), o.c, o.p, o.k.toString(), o.t, o.dt];
     for(var j=0;j<datas.length;j++){
-      if(j==3){x.fillStyle='#dc2626';x.font='bold 16px Arial';}else{x.fillStyle='#000';x.font='bold 13px Arial';}
-      var t=datas[j]; if(t.length>22 && j==2) t=t.substring(0,22);
-      x.fillText(t,tx,y+26); tx+=cols[j]+10;
+      if(j==3){
+        x.fillStyle='#dc2626';x.font='bold 24px Arial';
+        // biar angka 3 di tengah kolom
+        var tw=x.measureText(datas[j]).width;
+        x.fillText(datas[j], pos[j]+(cols[j]-tw)/2, y+38);
+      }else{
+        x.fillStyle='#000';x.font='bold 20px Arial';
+        x.fillText(datas[j], pos[j]+18, y+38);
+      }
     }
     y+=rowH;
   }
-  if(D[D.length-1].n){y+=20;x.fillStyle='#000';x.font='bold 15px Arial';x.fillText('Catatan: '+D[D.length-1].n,15,y);}
+  if(D[D.length-1].n){y+=25;x.fillStyle='#000';x.font='bold 20px Arial';x.fillText('Catatan: '+D[D.length-1].n,15,y);}
   lastImg=c.toDataURL('image/png');
   document.getElementById('imgPrev').src=lastImg;
   document.getElementById('prev').style.display='block';
