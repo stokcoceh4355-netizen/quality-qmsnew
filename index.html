@@ -76,15 +76,50 @@ function G(){
   if(D.length==0){alert('Belum ada laporan!');return;}
   var c=document.getElementById('v');
   var x=c.getContext('2d');
-  var W=1080; // digedein biar muat
-  var cols=[80,170,300,180,200,250]; // total = 1180? no, ini totalnya kita hitung dari W
-  // Biar gak jebol, pakai posisi kumulatif, jangan +10 terus
-  var cols=[90, 180, 320, 180, 160, 250]; // total = 1180
-  W = cols.reduce((a,b)=>a+b,0);
-  var rowH=58;
+  // Lebar kolom baru - KET dilebarin, PART NO dikecilin dikit
+  var cols=[90, 170, 280, 170, 240, 230]; // total 1180, sama kayak dulu
+  var W = cols.reduce((a,b)=>a+b,0);
   var headH=62;
   c.width=W+20;
-  c.height=70+headH+(D.length*rowH)+80;
+  // Hitung tinggi dulu biar KET yang panjang bisa 2 baris
+  function wrapText(text, maxW, font){
+    x.font = font;
+    var words = text.split(' ');
+    var lines = [];
+    var cur = '';
+    // Kalau ada kata panjang tanpa spasi kayak Pending/Abnormal, pecah paksa
+    words.forEach(function(w){
+      var test = cur ? cur + ' ' + w : w;
+      if(x.measureText(test).width > maxW && cur){
+        lines.push(cur);
+        cur = w;
+      } else {
+        cur = test;
+      }
+      // Pecah kata yang kepanjangan sendiri
+      while(x.measureText(cur).width > maxW && cur.length > 1){
+        var cut = cur.length;
+        while(cut > 0 && x.measureText(cur.slice(0,cut)).width > maxW) cut--;
+        if(cut < 1) cut = 1;
+        lines.push(cur.slice(0,cut));
+        cur = cur.slice(cut);
+      }
+    });
+    if(cur) lines.push(cur);
+    return lines;
+  }
+
+  var rowsData = [];
+  var totalH = 0;
+  for(var i=0;i<D.length;i++){
+    var o=D[i];
+    var ketLines = wrapText(o.t, cols[4]-36, 'bold 20px Arial');
+    var rowH = ketLines.length > 1 ? 78 : 58;
+    rowsData.push({o:o, ketLines:ketLines, rowH:rowH});
+    totalH += rowH;
+  }
+
+  c.height=70+headH+totalH+80;
   x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
   x.fillStyle='#1e40af';x.fillRect(0,0,c.width,50);
   x.fillStyle='#fff';x.font='bold 22px Arial';x.fillText('LAPORAN KEKURANGAN DELIVERY -  QUALITY DEPARTEMEN - '+dT(),20,33);
@@ -100,8 +135,10 @@ function G(){
     x.fillText(headers[i], pos[i]+18, y+40);
   }
   y+=headH;
-  for(var i=0;i<D.length;i++){
-    var o=D[i];
+  for(var i=0;i<rowsData.length;i++){
+    var o=rowsData[i].o;
+    var ketLines=rowsData[i].ketLines;
+    var rowH=rowsData[i].rowH;
     x.fillStyle=i%2==0?'#dbeafe':'#ffffff';
     x.fillRect(10,y,W,rowH);
     x.strokeStyle='#94a3b8';x.lineWidth=1.5;
@@ -113,9 +150,17 @@ function G(){
     for(var j=0;j<datas.length;j++){
       if(j==3){
         x.fillStyle='#dc2626';x.font='bold 24px Arial';
-        // biar angka 3 di tengah kolom
         var tw=x.measureText(datas[j]).width;
         x.fillText(datas[j], pos[j]+(cols[j]-tw)/2, y+38);
+      }else if(j==4){
+        // KET - bisa 2 baris, tetep bold 20px
+        x.fillStyle='#000';x.font='bold 20px Arial';
+        if(ketLines.length==1){
+          x.fillText(ketLines[0], pos[j]+18, y+38);
+        }else{
+          x.fillText(ketLines[0], pos[j]+18, y+30);
+          x.fillText(ketLines[1], pos[j]+18, y+56);
+        }
       }else{
         x.fillStyle='#000';x.font='bold 20px Arial';
         x.fillText(datas[j], pos[j]+18, y+38);
