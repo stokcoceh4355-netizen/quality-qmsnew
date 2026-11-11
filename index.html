@@ -1,5 +1,16 @@
 <html><head><meta name="viewport" content="width=device-width,initial-scale=1"><title>QMS AIRIN FINAL</title>
-<script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>const firebaseConfig = {
+  apiKey: "AIzaSyC6XpW8knk_RQU738dF2q0RkPViqZm3o3I",
+  authDomain: "data-qms.firebaseapp.com",
+  projectId: "data-qms",
+  storageBucket: "data-qms.firebasestorage.app",
+  messagingSenderId: "148658955290",
+  appId: "1:148658955290:web:1de28ebcd69f380d2a9da3"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();location.href=location.pathname+'?logout=1&v='+Date.now();}
 (function(){try{var p=new URLSearchParams(location.search);if(p.has('logout')){localStorage.removeItem('qms_isAdmin');sessionStorage.clear();alert('LOGOUT OK');location.href=location.pathname+'?v='+Date.now();}}catch(e){}})();
 </script></head>
@@ -28,7 +39,8 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 
 <button onclick="W()" style="width:auto;padding:12px 25px;background:#25D366;color:#fff;display:block;margin:10px auto;font-weight:bold;border-radius:10px">💬   SHARE WA</button>
 <button onclick="G()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;margin-top:6px;font-weight:bold;display:block;margin:auto;border-radius:10px">📸  JADI GAMBAR</button>
-
+<button onclick="BUKA_RIWAYAT()" style="padding:12px 25px;background:#e98a7a;color:#fff;font-weight:bold;display:block;margin:12px auto 25px auto;border-radius:10px;border:2px solid #e98a7a">📂 RIWAYAT</button>
+<div id="riwBox" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;overflow:auto;padding:10px;box-sizing:border-box"><div style="background:#fff;padding:10px;max-width:600px;margin:auto"><div style="background:#e98a7a;color:#fff;padding:12px;text-align:center;font-weight:bold">📂 RIWAYAT</div><div id="riwList" style="margin-top:10px;font-size:12px">Memuat...</div><button onclick="document.getElementById('riwBox').style.display='none'" style="width:100%;padding:12px;background:#000;color:#fff;margin-top:10px;font-weight:bold">TUTUP</button></div></div>
 <div id="prev" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;overflow:auto;padding:10px;box-sizing:border-box">
 <div style="background:#fff;padding:10px;max-width:850px;margin:auto"><b>PREVIEW GAMBAR</b> - ini total semua laporan
 <br><img id="imgPrev" style="width:100%;border:2px solid #000;margin-top:10px"><br><br>
@@ -172,9 +184,13 @@ function G(){
   lastImg=c.toDataURL('image/png');
   document.getElementById('imgPrev').src=lastImg;
   document.getElementById('prev').style.display='block';
-}
+SIMPAN_RIWAYAT();}
 function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='QMS_TOTAL_'+Date.now()+'.png';a.href=lastImg;a.click();}
 window.onload=function(){R();var n=localStorage.getItem('qms_note');if(n){document.getElementById('ct').value=n;}var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}document.getElementById('ct').addEventListener('input',saveAll);};
+function BUKA_RIWAYAT(){document.getElementById('riwBox').style.display='block';var el=document.getElementById('riwList');el.innerHTML='Memuat...';if(typeof db==='undefined'||!db){el.innerHTML='Firebase belum aktif';return;}db.collection('riwayat_qms').orderBy('ts','desc').limit(30).get().then(function(snap){if(snap.empty){el.innerHTML='Belum ada riwayat. Klik JADI GAMBAR dulu.';return;}var h='<button onclick="HAPUS_SEMUA()" style="background:#d00;color:#fff;border:0;padding:8px 12px;border-radius:8px;width:100%;margin-bottom:10px;font-weight:bold">HAPUS SEMUA</button>';snap.forEach(function(doc){var d=doc.data();h+='<div style="border:2px solid #e98a7a;margin-bottom:12px;padding:8px;border-radius:8px"><b>'+(d.tgl||'')+'</b> - '+(d.jumlah||0)+' laporan <button onclick="HAPUS_SATU(\''+doc.id+'\')" style="background:#d00;color:#fff;border:0;padding:4px 8px;border-radius:6px;float:right">Hapus</button><br>';if(d.img)h+='<img src="'+d.img+'" style="width:100%;border:1px solid #000">';h+='</div>';});el.innerHTML=h;});}
+function HAPUS_SATU(id){if(!confirm('Hapus laporan ini?'))return;db.collection('riwayat_qms').doc(id).delete().then(function(){BUKA_RIWAYAT();});}
+function HAPUS_SEMUA(){if(!confirm('Hapus SEMUA riwayat?'))return;db.collection('riwayat_qms').get().then(function(snap){snap.forEach(function(doc){doc.ref.delete();});BUKA_RIWAYAT();});}
+function SIMPAN_RIWAYAT(){if(typeof db==='undefined'||!db||!lastImg)return;try{var kecil=document.getElementById('v').toDataURL('image/jpeg',0.65);var ringkas=D.map(function(o,i){return (i+1)+'. '+o.c+' | '+o.p+' | '+o.k+' | '+o.t;}).join('\n');db.collection('riwayat_qms').add({img:kecil,tgl:dT(),ts:Date.now(),jumlah:D.length,isi:ringkas});}catch(e){}}
 </script>
 </body>
 </html>
