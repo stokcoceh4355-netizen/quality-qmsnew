@@ -28,6 +28,8 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 
 <button onclick="W()" style="width:auto;padding:12px 25px;background:#25D366;color:#fff;display:block;margin:10px auto;font-weight:bold;border-radius:10px">💬   SHARE WA</button>
 <button onclick="G()" style="width:auto;padding:12px 25px;background:#0e47a1;color:#fff;margin-top:6px;font-weight:bold;display:block;margin:auto;border-radius:10px">📸  JADI GAMBAR</button>
+<!-- TAMBAHAN RIWAYAT - BARU -->
+<button onclick="openRiwayat()" style="width:auto;padding:12px 25px;background:#e98a7a;color:#000;font-weight:bold;display:block;margin:16px auto 0 auto;border-radius:10px">🗂️  RIWAYAT GAMBAR</button>
 
 <div id="prev" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999;overflow:auto;padding:10px;box-sizing:border-box">
 <div style="background:#fff;padding:10px;max-width:850px;margin:auto"><b>PREVIEW GAMBAR</b> - ini total semua laporan
@@ -36,12 +38,18 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 <button onclick="document.getElementById('prev').style.display='none'" style="width:100%;padding:10px;background:#000;color:#fff;margin-top:6px">TUTUP</button>
 </div></div>
 
+<!-- TAMBAHAN POPUP RIWAYAT - BARU -->
+<div id="riwayatPop" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;overflow:auto;padding:10px;box-sizing:border-box">
+<div style="background:#fff;padding:10px;max-width:850px;margin:auto"><b>RIWAYAT GAMBAR</b> - gambar yang sudah di-download
+<div id="riwayatList" style="margin-top:10px"></div>
+<button onclick="hapusSemuaRiwayat()" style="width:100%;padding:12px;background:red;color:#fff;font-weight:bold;margin-top:10px">🗑️ HAPUS SEMUA RIWAYAT</button>
+<button onclick="document.getElementById('riwayatPop').style.display='none'" style="width:100%;padding:10px;background:#000;color:#fff;margin-top:6px">TUTUP</button>
+</div></div>
+
 <canvas id="v" style="display:none"></canvas>
 <hr><div style="text-align:center;padding:10px"><button onclick="L()" id="lb" style="background:#000;color:#fff;padding:12px 25px;font-weight:bold;border-radius:8px">LOGIN ADMIN</button></div>
 
-<div id="ad" style="display:none;border:3px solid red;background:#fee;padding:8px;font-size:12px"><b>ADMIN PANEL</b><br><br>Customer:<br><input id="i1" style="width:65%;padding:6px"><button onclick="A(1)">+</button><div id="l1" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Part:<br><input id="i2" style="width:65%;padding:6px"><button onclick="A(2)">+</button><div id="l2" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Ket:<br><input id="i3" style="width:65%;padding:6px"><button onclick="A(3)">+</button><div id="l3" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div><button onclick="S()" style="width:100%;padding:8px;background:green;color:#fff;font-weight:bold;margin-top:6px">SIMPAN PERMANEN</button><button onclick="E()" style="width:100%;padding:12px;background:#ff9800;color:#000;font-weight:bold;margin-top:6px;border:2px solid #000">EXPORT KE INDEX.HTML</button><button onclick="forceLogout()" style="width:100%;padding:14px;background:#000;color:#fff;margin-top:12px;font-weight:bold;border:2px solid red">LOGOUT ADMIN</button></div></div>
-
-<script>
+<div id="ad" style="display:none;border:3px solid red;background:#fee;padding:8px;font-size:12px"><b>ADMIN PANEL</b><br><br>Customer:<br><input id="i1" style="width:65%;padding:6px"><button onclick="A(1)">+</button><div id="l1" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Part:<br><input id="i2" style="width:65%;padding:6px"><button onclick="A(2)">+</button><div id="l2" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Ket:<br><input id="i3" style="width:65%;padding:6px"><button onclick="A(3)">+</button><div id="l3" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div><button onclick="S()" style="width:100%;padding:8px;background:green;color:#fff;font-weight:bold;margin-top:6px">SIMPAN PERMANEN</button><button onclick="E()" style="width:100%;padding:12px;background:#ff9800;color:#000;font-weight:bold;margin-top:6px;border:2px solid #000">EXPORT KE INDEX.HTML</button><button onclick="forceLogout()" style="width:100%;padding:14px;background:#000;color:#fff;margin-top:12px;font-weight:bold;border:2px solid red">LOGOUT ADMIN</button></div></div><script>
 var defC=["FII","ASKA","NIC","NTC","DPM","SANGO","KIIN","ICHI","-"];
 var defP=["-","51513-0K030","51995-BZ070","65542-68P00","51961-KK011","51961-KK010","71876W030P","14002W050P-07","14002W280P-07","14002W280P-21","14002W280P-11","51999-BZ030","51992-BZ150(DPM)","48701-BZ031-V1","51994-BZ170","51992-BZ150(NIC)","66312-D1859","51922-D4110","51952-D4111","5220AU54","5220AU53","5230G328","5230G327","5251D307","751C4W010P","5311D195","5312C193","5314A791","5314A792","5220BA54","5253AT15","5253AT16","5220L089","5220L090","1091A475","1091A476","762B2B010P","762B3B010P","77618B000P","77619B000P","77626B000P","77627B000P","762B2C010P","762B3C010P","61767-VT020","61766-VT020","90174-T0019","94223-81000","94223-60600","94223-80600","62151-68P00","65162-68P00","62141-68P00","62162-68P00-G","62332-68P00-G","62132-68P00-G","D41E1-PP009S-G","57658-0D160-TDB","74U50-BK011S","74U50-PP616S","57248-VT020","57249-VT020","53746-VT020","53745-VT020","53725-VT020","58171-0D080","58339-0D250","53333-0D150","61677-0D080","55721-0D200","61419-0D110","61418-0D110","61738-0D070","61737-0D070","58218-0D090","58217-0D090","61414-0D080","61413-0D080","55778-0D060","55724-0D020","55723-0D090","61641-0D090","74U50-PP409S","D41E1-PP009S","61377-BZ140","61378-BZ080","61352-BZ170","61351-BZ170","62150-73R00","62140-73R00","62412-73R00","62362-73R00","62332-68P00-G","62212-73R00","62162-73R00","62132-68P00-G","62126-73R00","61315-73R00","67LA0-FL002S","67LA0-BKP09S","67LA0-BK008S","889FZ-PP009S","889FI-PP009S","D98E7-PP007S","61642-0D090"];
 var defT=["Ready","Tunggu produksi","Pending/Abnormal","Tunggu Material","Handwork","-"];
@@ -173,8 +181,32 @@ function G(){
   document.getElementById('imgPrev').src=lastImg;
   document.getElementById('prev').style.display='block';
 }
-function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='QMS_TOTAL_'+Date.now()+'.png';a.href=lastImg;a.click();}
+function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='QMS_TOTAL_'+Date.now()+'.png';a.href=lastImg;a.click();/* TAMBAHAN RIWAYAT - BARU */ try{simpanRiwayat(lastImg);}catch(e){} }
+// TAMBAHAN RIWAYAT - BARU - FUNGSI BARU SEMUA, TIDAK MENGUBAH FUNGSI LAMA
+function getRiwayat(){try{var v=localStorage.getItem('qms_riwayat');return v?JSON.parse(v):[]}catch(e){return []}}
+function simpanRiwayat(img){var r=getRiwayat();r.unshift({img:img,dt:dT()});if(r.length>20)r=r.slice(0,20);try{localStorage.setItem('qms_riwayat',JSON.stringify(r));}catch(e){alert('Riwayat penuh, hapus riwayat lama dulu');}}
+function openRiwayat(){var r=getRiwayat();var box=document.getElementById('riwayatList');if(r.length==0){box.innerHTML='<p style="color:#999;text-align:center">Belum ada riwayat gambar</p>';}else{var h='';for(var i=0;i<r.length;i++){h+='<div style="border:2px solid #000;margin-bottom:10px;padding:6px"><b>'+(i+1)+'. '+r[i].dt+'</b><br><img src="'+r[i].img+'" style="width:100%;border:1px solid #ccc;margin-top:6px"><br><a href="'+r[i].img+'" download="QMS_RIWAYAT_'+i+'.png" style="display:block;text-align:center;background:green;color:#fff;padding:10px;margin-top:6px;font-weight:bold;text-decoration:none">⬇️ DOWNLOAD LAGI</a><button onclick="hapusSatuRiwayat('+i+')" style="width:100%;padding:10px;background:red;color:#fff;font-weight:bold;margin-top:6px">🗑️ HAPUS GAMBAR INI</button></div>';}box.innerHTML=h;}document.getElementById('riwayatPop').style.display='block';}
+function hapusSatuRiwayat(i){if(!confirm('Hapus gambar riwayat ini?'))return;var r=getRiwayat();r.splice(i,1);localStorage.setItem('qms_riwayat',JSON.stringify(r));openRiwayat();}
+function hapusSemuaRiwayat(){if(!confirm('Hapus SEMUA riwayat gambar?'))return;localStorage.removeItem('qms_riwayat');openRiwayat();}
 window.onload=function(){R();var n=localStorage.getItem('qms_note');if(n){document.getElementById('ct').value=n;}var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}document.getElementById('ct').addEventListener('input',saveAll);};
+</script>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyC6XpW8knk_RQU738dF2q0RkPViqZm3o3I",
+    authDomain: "data-qms.firebaseapp.com",
+    projectId: "data-qms",
+    storageBucket: "data-qms.firebasestorage.app",
+    messagingSenderId: "148658955290",
+    appId: "1:148658955290:web:1de28ebcd69f380d2a9da3"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  window.db = db;
+  console.log("Firebase nyambung!");
 </script>
 </body>
 </html>
