@@ -16,7 +16,7 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 </script></head>
 <body style="margin:0;padding:8px;background:#eee;font-family:Arial">
 <div style="background:#fff;padding:10px;max-width:550px;margin:auto">
-<div style="background:#0e47a1;color:#fff;padding:10px;text-align:center;font-weight:bold">QUALITY DEPARTEMEN</div>
+<div style="background:linear-gradient(to right,#0a2a5e,#1565d8,#00b894,#00e676);-webkit-background-clip:text;background-clip:text;color:transparent;text-align:center;font-weight:900;font-size:30px;font-family:Arial,sans-serif">QUALITY DEPARTEMEN</div>
 <br>Customer:<br>
 <input id="fs" placeholder="CARI CUSTOMER" style="width:100%;padding:12px;border:3px solid #D5D5D5;box-sizing:border-box;border-radius:10px" onkeyup="FS()">
 <select id="a" style="width:100%;padding:14px;border:3px solid #D5D5D5;margin-top:4px;border-radius:10px"></select>
@@ -61,7 +61,6 @@ function forceLogout(){localStorage.removeItem('qms_isAdmin');sessionStorage.cle
 <hr><div style="text-align:center;padding:10px"><button onclick="L()" id="lb" style="background:#000;color:#fff;padding:12px 25px;font-weight:bold;border-radius:8px">LOGIN ADMIN</button></div>
 
 <div id="ad" style="display:none;border:3px solid red;background:#fee;padding:8px;font-size:12px"><b>ADMIN PANEL</b><br><br>Customer:<br><input id="i1" style="width:65%;padding:6px"><button onclick="A(1)">+</button><div id="l1" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Part:<br><input id="i2" style="width:65%;padding:6px"><button onclick="A(2)">+</button><div id="l2" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div>Ket:<br><input id="i3" style="width:65%;padding:6px"><button onclick="A(3)">+</button><div id="l3" style="background:#fff;padding:4px;margin:4px 0;border:1px solid #ccc"></div><button onclick="S()" style="width:100%;padding:8px;background:green;color:#fff;font-weight:bold;margin-top:6px">SIMPAN PERMANEN</button><button onclick="E()" style="width:100%;padding:12px;background:#ff9800;color:#000;font-weight:bold;margin-top:6px;border:2px solid #000">EXPORT KE INDEX.HTML</button><button onclick="forceLogout()" style="width:100%;padding:14px;background:#000;color:#fff;margin-top:12px;font-weight:bold;border:2px solid red">LOGOUT ADMIN</button></div></div>
-
 <script>
 var defC=["FII","ASKA","NIC","NTC","DPM","SANGO","KIIN","ICHI","-"];
 var defP=["-","51513-0K030","51995-BZ070","65542-68P00","51961-KK011","51961-KK010","71876W030P","14002W050P-07","14002W280P-07","14002W280P-21","14002W280P-11","51999-BZ030","51992-BZ150(DPM)","48701-BZ031-V1","51994-BZ170","51992-BZ150(NIC)","66312-D1859","51922-D4110","51952-D4111","5220AU54","5220AU53","5230G328","5230G327","5251D307","751C4W010P","5311D195","5312C193","5314A791","5314A792","5220BA54","5253AT15","5253AT16","5220L089","5220L090","1091A475","1091A476","762B2B010P","762B3B010P","77618B000P","77619B000P","77626B000P","77627B000P","762B2C010P","762B3C010P","61767-VT020","61766-VT020","90174-T0019","94223-81000","94223-60600","94223-80600","62151-68P00","65162-68P00","62141-68P00","62162-68P00-G","62332-68P00-G","62132-68P00-G","D41E1-PP009S-G","57658-0D160-TDB","74U50-BK011S","74U50-PP616S","57248-VT020","57249-VT020","53746-VT020","53745-VT020","53725-VT020","58171-0D080","58339-0D250","53333-0D150","61677-0D080","55721-0D200","61419-0D110","61418-0D110","61738-0D070","61737-0D070","58218-0D090","58217-0D090","61414-0D080","61413-0D080","55778-0D060","55724-0D020","55723-0D090","61641-0D090","74U50-PP409S","D41E1-PP009S","61377-BZ140","61378-BZ080","61352-BZ170","61351-BZ170","62150-73R00","62140-73R00","62412-73R00","62362-73R00","62332-68P00-G","62212-73R00","62162-73R00","62132-68P00-G","62126-73R00","61315-73R00","67LA0-FL002S","67LA0-BKP09S","67LA0-BK008S","889FZ-PP009S","889FI-PP009S","D98E7-PP007S","61642-0D090"];
@@ -129,7 +128,6 @@ function G(){
     if(cur) lines.push(cur);
     return lines;
   }
-
   var rowsData = [];
   var totalH = 0;
   for(var i=0;i<D.length;i++){
@@ -139,19 +137,16 @@ function G(){
     rowsData.push({o:o, ketLines:ketLines, rowH:rowH});
     totalH += rowH;
   }
-
   c.height=70+headH+totalH+80;
   x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);
   x.fillStyle='#1e40af';x.fillRect(0,0,c.width,50);
   x.fillStyle='#fff';x.font='bold 22px Arial';x.fillText('LAPORAN KEKURANGAN DELIVERY -  QUALITY DEPARTEMEN - '+dT(),20,33);
-  
   var y=70;
   x.fillStyle='#1e40af';x.fillRect(10,y,W,headH);
   x.fillStyle='#fff';x.font='bold 20px Arial';
   var headers=['NO','CUSTOMER','PART NO','KEKURANGAN','KET','WAKTU'];
   var pos=[10];
   for(var i=0;i<cols.length;i++) pos.push(pos[i]+cols[i]);
-
   for(var i=0;i<headers.length;i++){
     x.fillText(headers[i], pos[i]+18, y+40);
   }
@@ -191,8 +186,7 @@ function G(){
   }
   if(D[D.length-1].n){y+=25;x.fillStyle='#000';x.font='bold 20px Arial';x.fillText('Catatan: '+D[D.length-1].n,15,y);}
   lastImg=c.toDataURL('image/png');
-  document.getElementById('imgPrev').src=lastImg;
-  document.getElementById('prev').style.display='block';
+  document.getElementById('imgPrev').src=lastImg; document.getElementById('prev').style.display='block';
 SIMPAN_RIWAYAT();}
 function DL(){if(!lastImg)return;var a=document.createElement('a');a.download='QMS_TOTAL_'+Date.now()+'.png';a.href=lastImg;a.click();}
 window.onload=function(){R();var n=localStorage.getItem('qms_note');if(n){document.getElementById('ct').value=n;}var a=localStorage.getItem('qms_isAdmin');if(a=='1'){isA=true;document.getElementById('ad').style.display='block';document.getElementById('lb').innerText='ADMIN AKTIF';document.getElementById('lb').style.background='green';}document.getElementById('ct').addEventListener('input',saveAll);};
